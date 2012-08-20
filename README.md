@@ -1,4 +1,14 @@
 Coursera
 ========
 
-Note&amp;Exercise for the course on Coursera
+Note&Exercise for the course on Coursera
+
+Src
+---
+
+Programming assignments source files
+
+Script
+------
+
+Some utility python script files for exercises.
