@@ -5,6 +5,10 @@
  */
 public class Percolation {
     /**
+     * Number of virtual sites.
+     */
+    private static int vsNum = 2;
+    /**
      * size of grid.
      */
     private int size;
@@ -15,15 +19,13 @@ public class Percolation {
     private boolean[] sites;
 
     /**
-     * Number of virtual sites.
-     */
-    private static int vsNum = 2;
-
-    /**
      * quick union interface.
      */
     private WeightedQuickUnionUF quickUnion;
-
+    /**
+     * quick union interface.
+     */
+    private WeightedQuickUnionUF quickUnionNoBottom;
     /**
      * virtual top site index.
      */
@@ -48,6 +50,7 @@ public class Percolation {
         sites = new boolean[n * n + vsNum];
         // add virtual number to sites array
         quickUnion = new WeightedQuickUnionUF(n * n + vsNum);
+        quickUnionNoBottom = new WeightedQuickUnionUF(n * n + 1);
 
         vTop = n * n;
         vBottom = n * n + 1;
@@ -90,6 +93,9 @@ public class Percolation {
     private void union(final int p, final int q) {
         if (sites[p] && sites[q]) {
             quickUnion.union(p, q);
+            if (p <= size * size && q <= size * size) {
+                quickUnionNoBottom.union(p, q);
+            }
         }
     }
 
@@ -99,7 +105,7 @@ public class Percolation {
      * @param i row
      * @param j column
      */
-    public final void open(final int i, final int j) {
+    public void open(final int i, final int j) {
         if (!isValidIndex(i, j)) {
             throw new java.lang.IndexOutOfBoundsException();
         }
@@ -135,7 +141,7 @@ public class Percolation {
      * @param j column
      * @return is open or not
      */
-    public final boolean isOpen(final int i, final int j) {
+    public boolean isOpen(final int i, final int j) {
         if (!isValidIndex(i, j)) {
             throw new java.lang.IndexOutOfBoundsException();
         }
@@ -148,18 +154,18 @@ public class Percolation {
      * @param j column
      * @return is full or not
      */
-    public final boolean isFull(final int i, final int j) {
+    public boolean isFull(final int i, final int j) {
         if (!isValidIndex(i, j)) {
             throw new java.lang.IndexOutOfBoundsException();
         }
-        return quickUnion.connected(vTop, getSiteIndex(i, j));
+        return quickUnionNoBottom.connected(vTop, getSiteIndex(i, j));
     }
     /**
      * does the system percolate?
      *
      * @return percolate or not
      */
-    public final boolean percolates() {
+    public boolean percolates() {
         return quickUnion.connected(vTop, vBottom);
     }
 }
