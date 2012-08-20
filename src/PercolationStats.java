@@ -4,15 +4,21 @@
  *
  */
 public class PercolationStats {
-    /**
-     * Percolation interface.
-     */
-    private Percolation perco;
 
     /**
      * sample mean of percolation threshold.
      */
     private double sampleMean;
+    
+    /**
+     * result for each run.
+     */
+    private double[] result;
+    
+    /**
+     * times of experiments.
+     */
+    private int times;
 
     /**
      * size of the grid.
@@ -32,15 +38,17 @@ public class PercolationStats {
         if (n < 1 || t < 1) {
             throw new java.lang.IllegalArgumentException();
         }
+        
         size = n;
-        perco = new Percolation(n);
-        int[] times = new int[t];
+        times = t;
+        
+        result = new double[t];
         for (int i = 0; i < t; i++) {
-            times[i] = run();
-            sampleMean += times[i];
+            result[i] = (double)run() / (size * size);
+            sampleMean += result[i];
         }
 
-        sampleMean = sampleMean / (t * size * size);
+        sampleMean = sampleMean / t;
     }
 
     /**
@@ -49,6 +57,8 @@ public class PercolationStats {
      * @return how many sites is opened when percolates
      */
     private int run() {
+        Percolation perco = new Percolation(size);
+        
         int numSites = 0;
         while (!perco.percolates()) {
             int p = getRandomIndex();
@@ -88,7 +98,11 @@ public class PercolationStats {
      * @return sample standard deviation
      */
     public final double stddev() {
-        return 0.0;
+        double stddev = 0.0; 
+        for(int i = 0; i < times; i++) {
+            stddev += (result[i] - sampleMean) * (result[i] - sampleMean);
+        }
+        return Math.sqrt(stddev / (times - 1));
     }
     /**
      * test client.
@@ -96,8 +110,14 @@ public class PercolationStats {
      * @param args command line arguments.
      */
     public static void main(final String[] args) {
-        PercolationStats stats = new PercolationStats(200, 100);
+        if (args.length != 2) {
+            throw new java.lang.IllegalArgumentException();
+        }
+        int size = Integer.parseInt(args[0]);
+        int times = Integer.parseInt(args[1]);
+        PercolationStats stats = new PercolationStats(size, times);
         Out out = new Out();
-        out.printf("mean %f", stats.mean());
+        out.printf("mean %f \n", stats.mean());
+        out.printf("stddev %f", stats.stddev());
     }
 }
