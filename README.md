@@ -1,14 +1,11 @@
-Coursera
-========
+# Coursera - Algorithms
 
 Note&Exercise for the course on Coursera
 
-Src
----
+## Src
 
 Programming assignments source files
 
-Script
-------
+## Script
 
 Some utility python script files for exercises.
