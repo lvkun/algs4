@@ -45,6 +45,15 @@ public class Deque<Item> implements Iterable<Item> {
      * Last node.
      */
     private Node last;
+    
+    /**
+     * construct an empty deque.
+     */
+     public Deque() {
+         first = null;
+         last = null;
+         size = 0;
+     }
 
     /**
      * @author brlv
@@ -95,15 +104,6 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     /**
-    * construct an empty deque.
-    */
-    public Deque() {
-        first = null;
-        last = null;
-        size = 0;
-    }
-
-    /**
      * is the deque empty?
      * @return is empty or not
      */
@@ -112,7 +112,7 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     /**
-     * return size.
+     * return the number of items on the deque.
      * @return size
      */
     public final int size() {
@@ -120,15 +120,20 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     /**
-     * add item to the front of deque.
+     * insert the item at the front.
      * @param item the item should be insert to the front
      */
-    public final void addFirst(final Item item) {
+    public final void addFirst(Item item) {
+        if (item == null) {
+            throw new java.lang.NullPointerException();
+        }
+        
         Node oldfirst = first;
+
         first = new Node();
         first.item = item;
-        first.next = null;
-        first.prev = oldfirst;
+        first.prev = null;
+        first.next = oldfirst;
 
         if (isEmpty()) {
             last = first;
@@ -137,5 +142,63 @@ public class Deque<Item> implements Iterable<Item> {
         }
 
         size++;
-    };
+    }
+
+    /**
+     * insert the item at the end.
+     * @param item the item should be insert to the end
+     */
+    public void addLast(Item item) {
+        if (item == null) {
+            throw new java.lang.NullPointerException();
+        }
+        Node oldlast = last;
+        
+        last = new Node();
+        last.item = item;
+        last.prev = oldlast;
+        last.next = null;
+        
+        if (isEmpty()) {
+            first = last;
+        } else {
+            oldlast.next = last;
+        }
+        
+        size++;
+    }
+    
+    /**
+     * delete and return the item at the front.
+     * @return the item at the front
+     */
+    public Item removeFirst() {
+        if (isEmpty()) {
+            throw new java.util.NoSuchElementException();
+        }
+        
+        Item item = first.item;
+        
+        first = first.next;
+        size--;
+        
+        return item;
+    }
+    
+    /**
+     * delete and return the item at the end.
+     * @return item at the end
+     */
+    public Item removeLast() {
+        if (isEmpty()) {
+            throw new java.util.NoSuchElementException();
+        }
+        
+        Item item = last.item;
+        
+        last = last.prev;
+        size--;
+        
+        return item;
+    }
 }
