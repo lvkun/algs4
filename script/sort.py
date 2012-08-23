@@ -1,5 +1,5 @@
 def shell_sort(ary, step):
-   for i in range(step, len(ary)):
+    for i in range(step, len(ary)):
         pos = i - step
         while pos >= 0:
             if ary[pos + step] < ary[pos]:
