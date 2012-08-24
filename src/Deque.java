@@ -45,7 +45,7 @@ public class Deque<Item> implements Iterable<Item> {
      * Last node.
      */
     private Node last;
-    
+
     /**
      * construct an empty deque.
      */
@@ -127,7 +127,7 @@ public class Deque<Item> implements Iterable<Item> {
         if (item == null) {
             throw new java.lang.NullPointerException();
         }
-        
+
         Node oldfirst = first;
 
         first = new Node();
@@ -153,21 +153,21 @@ public class Deque<Item> implements Iterable<Item> {
             throw new java.lang.NullPointerException();
         }
         Node oldlast = last;
-        
+
         last = new Node();
         last.item = item;
         last.prev = oldlast;
         last.next = null;
-        
+
         if (isEmpty()) {
             first = last;
         } else {
             oldlast.next = last;
         }
-        
+
         size++;
     }
-    
+
     /**
      * delete and return the item at the front.
      * @return the item at the front
@@ -176,15 +176,15 @@ public class Deque<Item> implements Iterable<Item> {
         if (isEmpty()) {
             throw new java.util.NoSuchElementException();
         }
-        
+
         Item item = first.item;
-        
+
         first = first.next;
         size--;
-        
+
         return item;
     }
-    
+
     /**
      * delete and return the item at the end.
      * @return item at the end
@@ -193,12 +193,12 @@ public class Deque<Item> implements Iterable<Item> {
         if (isEmpty()) {
             throw new java.util.NoSuchElementException();
         }
-        
+
         Item item = last.item;
-        
+
         last = last.prev;
         size--;
-        
+
         return item;
     }
 }
