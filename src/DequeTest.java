@@ -99,7 +99,7 @@ public class DequeTest extends TestCase {
             deque.addFirst(null);
             fail("No exception");
         } catch (java.lang.NullPointerException expected) {
-            
+            System.out.println("catch expected exception");
         }
         
     }
@@ -110,7 +110,7 @@ public class DequeTest extends TestCase {
             deque.addLast(null);
             fail("No exception");
         } catch (java.lang.NullPointerException expected) {
-            
+            System.out.println("catch expected exception");
         }
     }
     
@@ -123,7 +123,7 @@ public class DequeTest extends TestCase {
             deque.removeFirst();
             fail("No Exception");
         } catch (java.util.NoSuchElementException expected) {
-            
+            System.out.println("catch expected exception");
         }
     }
     
