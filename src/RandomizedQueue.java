@@ -1,4 +1,5 @@
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 
 /**
@@ -53,14 +54,28 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
      * @param item the item should be added to the queue
      */
     public void enqueue(Item item) {
+        if (item == null) {
+            throw new java.lang.NullPointerException();
+        }
         
+        if (size == queue.length) {
+            resize(2*queue.length);
+        }
+        
+        queue[size++] = item;
     }
     
     /**
      * @param capcity
      */
     private void resize(int capacity) {
+        Item[] temp = (Item[]) new Object[capacity];
         
+        for (int i = 0; i < size; i++) {
+            temp[i] = queue[i];
+        }
+        
+        queue = temp;
     }
     
     /**
@@ -68,7 +83,20 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
      * @return a random item
      */
     public Item dequeue() {
-        return null;
+        if (isEmpty()) {
+            throw new java.util.NoSuchElementException();
+        }
+        int randomIndex = StdRandom.uniform(size);
+        Item item = queue[randomIndex];
+        
+        // move the last item to fill the gap
+        if (randomIndex != size - 1) {
+            queue[randomIndex] = queue[size - 1];
+            queue[size - 1] = null;
+        }
+        
+        size--;
+        return item;
     }
     
     /**
@@ -76,7 +104,66 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
      * @return a random item
      */
     public Item sample() {
-        return null;
+        if (isEmpty()) {
+            throw new java.util.NoSuchElementException();
+        }
+        int randomIndex = StdRandom.uniform(size);
+        return queue[randomIndex];
+    }
+    
+    /**
+     * @author brlv
+     * an iterator, doesn't implement remove() since it's optional
+     */
+    private class ArrayIterator implements Iterator<Item> {
+        /**
+         * index.
+         */
+        private int index = 0;
+        /**
+         * random index array.
+         */
+        private int[] random;
+        
+        /**
+         * Create a random index array.
+         */
+        public ArrayIterator() {
+            random = new int[size];
+            for (int i = 0; i < random.length; i++) {
+                random[i] = i;
+            }
+            StdRandom.shuffle(random);
+        }
+        
+        /*
+         * @see java.util.Iterator#hasNext()
+         */
+        @Override
+        public boolean hasNext() {
+            return index < random.length;
+        }
+        
+        /*
+         * @see java.util.Iterator#remove()
+         */
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+        
+        /*
+         * @see java.util.Iterator#next()
+         */
+        @Override
+        public Item next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            int randomIndex = random[index];
+            index++;
+            return queue[randomIndex];
+        }
     }
     
     /*
@@ -85,7 +172,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     @Override
     public Iterator<Item> iterator() {
         
-        return null;
+        return new ArrayIterator();
     }
     
 }
