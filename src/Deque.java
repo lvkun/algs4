@@ -99,7 +99,7 @@ public class Deque<Item> implements Iterable<Item> {
      * @see java.lang.Iterable#iterator()
      */
     @Override
-    public final Iterator<Item> iterator()  {
+    public Iterator<Item> iterator()  {
         return new ListIterator();
     }
 
@@ -107,7 +107,7 @@ public class Deque<Item> implements Iterable<Item> {
      * is the deque empty?
      * @return is empty or not
      */
-    public final boolean isEmpty() {
+    public boolean isEmpty() {
         return size == 0;
     }
 
@@ -115,7 +115,7 @@ public class Deque<Item> implements Iterable<Item> {
      * return the number of items on the deque.
      * @return size
      */
-    public final int size() {
+    public int size() {
         return size;
     }
 
@@ -123,7 +123,7 @@ public class Deque<Item> implements Iterable<Item> {
      * insert the item at the front.
      * @param item the item should be insert to the front
      */
-    public final void addFirst(Item item) {
+    public void addFirst(Item item) {
         if (item == null) {
             throw new java.lang.NullPointerException();
         }
