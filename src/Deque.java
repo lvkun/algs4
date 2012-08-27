@@ -180,7 +180,13 @@ public class Deque<Item> implements Iterable<Item> {
         Item item = first.item;
 
         first = first.next;
+        if (first != null) { // to avoid loitering
+            first.prev = null;
+        }
         size--;
+        if (isEmpty()) {
+            last = null;
+        }
 
         return item;
     }
@@ -197,7 +203,13 @@ public class Deque<Item> implements Iterable<Item> {
         Item item = last.item;
 
         last = last.prev;
+        if (last != null) { // to avoid loitering
+            last.next = null;
+        }
         size--;
+        if (isEmpty()) {
+            first = null;
+        }
 
         return item;
     }

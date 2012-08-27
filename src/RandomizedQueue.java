@@ -92,10 +92,14 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         // move the last item to fill the gap
         if (randomIndex != size - 1) {
             queue[randomIndex] = queue[size - 1];
-            queue[size - 1] = null;
         }
-        
+        // set the last item to null
+        queue[size - 1] = null;
         size--;
+        
+        if (size < queue.length/4) {
+            resize(queue.length/2);
+        }
         return item;
     }
     
