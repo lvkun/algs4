@@ -8,7 +8,7 @@ public class Brute {
     
     /**
      * @param pointInfo
-     * @return
+     * @return point object
      */
     private static Point createPoint(String pointInfo) {
         String[] point = pointInfo.trim().split("\\s+");
@@ -20,14 +20,12 @@ public class Brute {
         
         return new Point(x, y);
     }
+    
     /**
-     * @param args
+     * @param args file path.
+     * @return point array.
      */
-    public static void main(String[] args) {
-        if (args.length != 1) {
-            throw new java.lang.IllegalArgumentException();
-        }
-        
+    private static Point[] load(String[] args) {
         In in = new In(args[0]);
         int pointNumber = Integer.parseInt(in.readLine());
         
@@ -37,11 +35,28 @@ public class Brute {
         if (pointNumber > 0) {
             while (!in.isEmpty() && index < pointNumber) {
                 String line = in.readLine();
+                if (line.trim().length() == 0) {
+                    continue;
+                }
                 points[index++] = createPoint(line);
             }
         }
         
+        in.close();
+        return points;
+    }
+    
+    /**
+     * @param args file path which contains points info.
+     */
+    public static void main(String[] args) {
+        if (args.length != 1) {
+            throw new java.lang.IllegalArgumentException();
+        }
         
+        Point[] points = load(args);
+        int pointNumber = points.length;
+
         Quick.sort(points);
         
         for (int i = 0; i < pointNumber - 3; i++) {
@@ -56,6 +71,8 @@ public class Brute {
                                 && (p1.slopeTo(p2) == p1.slopeTo(p4))) {
                             StdOut.println(p1 + " -> " + p2 
                                     + " -> " + p3 + " -> " + p4);
+                            
+                            p1.drawTo(p4);
                         }
                         
                     }
