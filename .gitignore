@@ -3,5 +3,6 @@
 .checkstyle
 .classpath
 .pydevproject
+*.pyc
 bin
 test
