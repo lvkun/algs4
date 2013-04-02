@@ -20,6 +20,9 @@ class Graph:
     def length(self):
         return len(self.dict)
 
+    def V(self):
+        return self.dict.keys()
+
 class DepthFirstSearch:
     def __init__(self, graph, index):
         self.marked = defaultdict(bool)
