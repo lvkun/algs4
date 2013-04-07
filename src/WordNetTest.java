@@ -10,7 +10,8 @@ public class WordNetTest extends TestCase {
         return suite;
     }
     
-    public void testWordNet() {
+    public void testSynsets3() {
+        WordNet wn = new WordNet("test\\wordnet\\synsets6.txt", "test\\wordnet\\hypernyms6TwoAncestors.txt");
         
     }
     
