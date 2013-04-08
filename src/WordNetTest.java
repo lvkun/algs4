@@ -10,9 +10,28 @@ public class WordNetTest extends TestCase {
         return suite;
     }
     
-    public void testSynsets3() {
-        WordNet wn = new WordNet("test\\wordnet\\synsets6.txt", "test\\wordnet\\hypernyms6TwoAncestors.txt");
-        
+    public void testSynsets6() {
+        WordNet wn = new WordNet("test\\wordnet\\synsets6.txt", 
+                "test\\wordnet\\hypernyms6TwoAncestors.txt");
+        assertTrue(wn.isNoun("a"));
+        assertFalse(wn.isNoun("ab"));
+    }
+    
+    public void testNouns() {
+        WordNet wn = new WordNet("test\\wordnet\\synsets6.txt", 
+        "test\\wordnet\\hypernyms6TwoAncestors.txt");
+        String[] nouns = {"a", "b", "c", "d", "e", "f"};
+        int i = 0;
+        for (String n : wn.nouns()) {
+            assertEquals(nouns[i], n);
+            i++;
+        }
+    }
+    
+    public void testDistance() {
+        WordNet wn = new WordNet("test\\wordnet\\synsets6.txt", 
+        "test\\wordnet\\hypernyms6TwoAncestors.txt");
+        assertEquals(wn.distance("a", "b"), 1);     
     }
     
     public static void main(String[] args) {

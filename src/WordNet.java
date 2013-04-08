@@ -3,25 +3,29 @@ import java.util.ArrayList;
 
 public class WordNet {
     
-    private class Word {
-        private String synset;
+    private BinarySearchST<String, WordInfo> dict;
+    private ArrayList<String> wordlist;
+    private Digraph hypernyms;
+    
+    /* 
+     * constructor takes the name of the two input files
+     */
+    public WordNet(String synsets, String hypernyms) {
+        readSynsets(synsets);
+        readHypernyms(dict.size(), hypernyms);
+    }
+    
+    private class WordInfo {
+        private int idx;
         private String gloss;
         
-        public Word(String synset, String gloss) {
-            this.setSynset(synset);
-            this.setGloss(gloss);
+        public WordInfo(int i, String g) {
+            idx = i;
+            gloss = g;
         }
 
-        public void setSynset(String synset) {
-            this.synset = synset;
-        }
-
-        public String getSynset() {
-            return synset;
-        }
-
-        public void setGloss(String gloss) {
-            this.gloss = gloss;
+        public int getIdx() {
+            return idx;
         }
 
         public String getGloss() {
@@ -29,98 +33,93 @@ public class WordNet {
         }
     }
     
-    private ArrayList<Word> wordlist;
-    
-    private Digraph hypernyms;
-    
     /**
      * Create wordlist (synsets) from file
      * 
      * @param synsets_filename
      */
-    private void readSynsets(String synsets_filename) {
-        In in = new In(synsets_filename);
+    private void readSynsets(String synsetsFilename) {
+        In in = new In(synsetsFilename);
         String line = in.readLine();
         
-        wordlist = new ArrayList<Word>();
-        while(line != null) {
+        dict = new BinarySearchST<String, WordInfo>();
+        wordlist = new ArrayList<String>();
+
+        while (line != null) {
             String[] items = line.split(",");
             
             if (items.length < 3) {
                 continue;
             }
             
-            Word word = new Word(items[1], items[2]);
-            wordlist.add(word);
+            WordInfo wi = new WordInfo(Integer.parseInt(items[0]), items[2]);
+            
+            dict.put(items[1], wi);
+            wordlist.add(items[1]);
             
             line = in.readLine();
         }
     }
     
-    private void readHypernyms(int V, String hypernyms_filename) {
-        In in = new In(hypernyms_filename);
+    private void readHypernyms(int V, String hypernymsFilename) {
+        In in = new In(hypernymsFilename);
         String line = in.readLine();
 
         hypernyms = new Digraph(V);
-        while(line != null) {
+        while (line != null) {
             String[] items = line.split(",");
             
             if (items.length < 2) {
                 continue;
             }
             
-            int v = Integer.parseInt(items[0]);
+            int w = Integer.parseInt(items[0]);
             for (int i = 1; i < items.length; i++) {
-               int w = Integer.parseInt(items[i]);
+               int v = Integer.parseInt(items[i]);
                hypernyms.addEdge(v, w);
-               
             }
             
             line = in.readLine();
         }
     }
     
-    /* 
-     * constructor takes the name of the two input files
-     */
-    public WordNet(String synsets, String hypernyms){
-        
-        readSynsets(synsets);
-        readHypernyms(wordlist.size(), hypernyms);
-        
-    }
+
 
     /*
      * returns all WordNet nouns
      */
     public Iterable<String> nouns() {
-        ArrayList<String> nouns = new ArrayList<String>();
-        for (int i = 0; i < wordlist.size(); i++) {
-            nouns.add(wordlist.get(i).synset);
-        }
-        return nouns;
+        return dict.keys();
     }
 
     /*
      * is the word a WordNet noun?
      */
     public boolean isNoun(String word) {
-        return true;
+        return dict.contains(word);
     }
 
     /*
      * distance between nounA and nounB (defined below)
      */
     public int distance(String nounA, String nounB) {
-        return 0;
+        SAP sap = new SAP(hypernyms);
+        int idxA = dict.get(nounA).getIdx();
+        int idxB = dict.get(nounB).getIdx();
+        return sap.length(idxA, idxB);
     }
 
     /*
-     * a synset (second field of synsets.txt) that is the common ancestor of nounA and nounB
+     * a synset (second field of synsets.txt) that is 
+     * the common ancestor of nounA and nounB
      * in a shortest ancestral path (defined below)
      */
     public String sap(String nounA, String nounB) {
-        return null;
+        SAP sap = new SAP(hypernyms);
+        int idxA = dict.get(nounA).getIdx();
+        int idxB = dict.get(nounB).getIdx();
+        int idxAncestor = sap.ancestor(idxA, idxB);
+        return wordlist.get(idxAncestor);
     }
 
     /*
