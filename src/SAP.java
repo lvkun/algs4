@@ -1,10 +1,11 @@
 
 public class SAP {
+    private Digraph graph;
     /*
      * constructor takes a digraph (not necessarily a DAG)
      */
     public SAP(Digraph G) {
-        
+        graph = G;
     }
 
     /* 
