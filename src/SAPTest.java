@@ -25,6 +25,15 @@ public class SAPTest extends TestCase {
         assertEquals(sap.ancestor(1, 6), -1);
     }
     
+    public void testDigraph2() {
+        In in = new In("test\\wordnet\\digraph2.txt");
+        Digraph G = new Digraph(in);
+        SAP sap = new SAP(G);
+        
+        assertEquals(sap.length(1, 5), 2);
+        assertEquals(sap.ancestor(1, 5), 0);
+    }
+    
     public static void main(String[] args) {
         junit.textui.TestRunner.run(suite());
     }

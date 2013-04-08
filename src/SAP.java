@@ -12,7 +12,22 @@ public class SAP {
      * length of shortest ancestral path between v and w; -1 if no such path
      */
     public int length(int v, int w) {
-        return 0;
+        BreadthFirstDirectedPaths bfsV = new BreadthFirstDirectedPaths(graph, v);
+        BreadthFirstDirectedPaths bfsW = new BreadthFirstDirectedPaths(graph, w);
+        
+        int max = -1;
+        for (int i = 0; i < graph.V(); i++) {
+            int v2i = bfsV.distTo(i);
+            int w2i = bfsW.distTo(i);
+            int dist = v2i + w2i;
+            
+            if (v2i != Integer.MAX_VALUE && w2i != Integer.MAX_VALUE 
+                    && (max > dist || max == -1)) {
+                max = dist;
+            }
+        }
+        
+        return max;
     }
 
     /* 
@@ -20,7 +35,24 @@ public class SAP {
      * ancestral path; -1 if no such path
      */
     public int ancestor(int v, int w) {
-        return 0;
+        BreadthFirstDirectedPaths bfsV = new BreadthFirstDirectedPaths(graph, v);
+        BreadthFirstDirectedPaths bfsW = new BreadthFirstDirectedPaths(graph, w);
+        
+        int max = Integer.MAX_VALUE;
+        int maxIndex = -1;
+        for (int i = 0; i < graph.V(); i++) {
+            int v2i = bfsV.distTo(i);
+            int w2i = bfsW.distTo(i);
+            int dist = v2i + w2i;
+            
+            if (v2i != Integer.MAX_VALUE && w2i != Integer.MAX_VALUE 
+                    && max > dist) {
+                max = dist;
+                maxIndex = i;
+            }
+        }
+        
+        return maxIndex;
     }
 
     /* 
@@ -28,7 +60,22 @@ public class SAP {
      * any vertex in w; -1 if no such path
      */
     public int length(Iterable<Integer> v, Iterable<Integer> w) {
-        return 0;
+        BreadthFirstDirectedPaths bfsV = new BreadthFirstDirectedPaths(graph, v);
+        BreadthFirstDirectedPaths bfsW = new BreadthFirstDirectedPaths(graph, w);
+        
+        int max = -1;
+        for (int i = 0; i < graph.V(); i++) {
+            int v2i = bfsV.distTo(i);
+            int w2i = bfsW.distTo(i);
+            int dist = v2i + w2i;
+            
+            if (v2i != Integer.MAX_VALUE && w2i != Integer.MAX_VALUE 
+                    && (max > dist || max == -1)) {
+                max = dist;
+            }
+        }
+        
+        return max;
     }
 
     /* 
@@ -36,7 +83,24 @@ public class SAP {
      * -1 if no such path
      */
     public int ancestor(Iterable<Integer> v, Iterable<Integer> w) {
-        return 0;
+        BreadthFirstDirectedPaths bfsV = new BreadthFirstDirectedPaths(graph, v);
+        BreadthFirstDirectedPaths bfsW = new BreadthFirstDirectedPaths(graph, w);
+        
+        int max = Integer.MAX_VALUE;
+        int maxIndex = -1;
+        for (int i = 0; i < graph.V(); i++) {
+            int v2i = bfsV.distTo(i);
+            int w2i = bfsW.distTo(i);
+            int dist = v2i + w2i;
+            
+            if (v2i != Integer.MAX_VALUE && w2i != Integer.MAX_VALUE 
+                    && max > dist) {
+                max = dist;
+                maxIndex = i;
+            }
+        }
+        
+        return maxIndex;
     }
 
     /* 
