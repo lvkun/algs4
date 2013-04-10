@@ -7,13 +7,14 @@ public class WordNet {
     private ArrayList<String> wordlist;
     private Digraph hypernymsGraph;
     private SAP sap;
+    private int maxIndex;
     
     /* 
      * constructor takes the name of the two input files
      */
     public WordNet(String synsets, String hypernyms) {
         readSynsets(synsets);
-        readHypernyms(dict.size(), hypernyms);
+        readHypernyms(hypernyms);
         
         sap = new SAP(hypernymsGraph);
     }
@@ -47,9 +48,10 @@ public class WordNet {
         
         dict = new BinarySearchST<String, WordInfo>();
         wordlist = new ArrayList<String>();
-
+        
+        String[] items = {"0"};
         while (line != null) {
-            String[] items = line.split(",");
+            items = line.split(",");
             
             if (items.length < 3) {
                 continue;
@@ -62,26 +64,30 @@ public class WordNet {
             
             line = in.readLine();
         }
+        
+        maxIndex = Integer.parseInt(items[0]) + 1;
     }
     
-    private void readHypernyms(int V, String hypernymsFilename) {
+    private void readHypernyms(String hypernymsFilename) {
         In in = new In(hypernymsFilename);
         String line = in.readLine();
-
-        hypernymsGraph = new Digraph(V);
+        hypernymsGraph = new Digraph(maxIndex);
+        
         while (line != null) {
             String[] items = line.split(",");
             
             if (items.length < 2) {
+                line = in.readLine();
                 continue;
             }
             
             int w = Integer.parseInt(items[0]);
             for (int i = 1; i < items.length; i++) {
                int v = Integer.parseInt(items[i]);
+               
                hypernymsGraph.addEdge(v, w);
             }
-            
+
             line = in.readLine();
         }
     }

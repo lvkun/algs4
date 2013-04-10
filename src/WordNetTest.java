@@ -10,6 +10,12 @@ public class WordNetTest extends TestCase {
         return suite;
     }
     
+    public void testIsNoun() {
+        WordNet wn = new WordNet("test\\wordnet\\synsets.txt", 
+        "test\\wordnet\\hypernyms.txt");
+        assertTrue(wn.isNoun("'s_Gravenhage"));
+    }
+    
     public void testSynsets6() {
         WordNet wn = new WordNet("test\\wordnet\\synsets6.txt", 
                 "test\\wordnet\\hypernyms6TwoAncestors.txt");
