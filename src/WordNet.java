@@ -5,7 +5,8 @@ public class WordNet {
     
     private BinarySearchST<String, WordInfo> dict;
     private ArrayList<String> wordlist;
-    private Digraph hypernyms;
+    private Digraph hypernymsGraph;
+    private SAP sap;
     
     /* 
      * constructor takes the name of the two input files
@@ -13,6 +14,8 @@ public class WordNet {
     public WordNet(String synsets, String hypernyms) {
         readSynsets(synsets);
         readHypernyms(dict.size(), hypernyms);
+        
+        sap = new SAP(hypernymsGraph);
     }
     
     private class WordInfo {
@@ -65,7 +68,7 @@ public class WordNet {
         In in = new In(hypernymsFilename);
         String line = in.readLine();
 
-        hypernyms = new Digraph(V);
+        hypernymsGraph = new Digraph(V);
         while (line != null) {
             String[] items = line.split(",");
             
@@ -76,7 +79,7 @@ public class WordNet {
             int w = Integer.parseInt(items[0]);
             for (int i = 1; i < items.length; i++) {
                int v = Integer.parseInt(items[i]);
-               hypernyms.addEdge(v, w);
+               hypernymsGraph.addEdge(v, w);
             }
             
             line = in.readLine();
@@ -103,7 +106,6 @@ public class WordNet {
      * distance between nounA and nounB (defined below)
      */
     public int distance(String nounA, String nounB) {
-        SAP sap = new SAP(hypernyms);
         int idxA = dict.get(nounA).getIdx();
         int idxB = dict.get(nounB).getIdx();
         return sap.length(idxA, idxB);
@@ -115,7 +117,6 @@ public class WordNet {
      * in a shortest ancestral path (defined below)
      */
     public String sap(String nounA, String nounB) {
-        SAP sap = new SAP(hypernyms);
         int idxA = dict.get(nounA).getIdx();
         int idxB = dict.get(nounB).getIdx();
         int idxAncestor = sap.ancestor(idxA, idxB);
