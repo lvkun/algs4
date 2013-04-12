@@ -20,20 +20,14 @@ public class WordNet {
     }
     
     private class WordInfo {
-        private int idx;
-        private String gloss;
+        private ArrayList<Integer> idx;
         
-        public WordInfo(int i, String g) {
-            idx = i;
-            gloss = g;
+        public WordInfo() {
+            idx = new ArrayList<Integer>();
         }
 
-        public int getIdx() {
+        public ArrayList<Integer> getIdxs() {
             return idx;
-        }
-
-        public String getGloss() {
-            return gloss;
         }
     }
     
@@ -57,9 +51,15 @@ public class WordNet {
                 continue;
             }
             
-            WordInfo wi = new WordInfo(Integer.parseInt(items[0]), items[2]);
-            
-            dict.put(items[1], wi);
+            //Integer.parseInt(items[0]);
+            if (dict.contains(items[1])) {
+                WordInfo wi = dict.get(items[1]);
+                wi.idx.add(Integer.parseInt(items[0]));
+            } else {
+                WordInfo wi = new WordInfo();
+                wi.idx.add(Integer.parseInt(items[0]));
+                dict.put(items[1], wi);
+            }
             wordlist.add(items[1]);
             
             line = in.readLine();
@@ -81,10 +81,9 @@ public class WordNet {
                 continue;
             }
             
-            int w = Integer.parseInt(items[0]);
+            int v = Integer.parseInt(items[0]);
             for (int i = 1; i < items.length; i++) {
-               int v = Integer.parseInt(items[i]);
-               
+               int w = Integer.parseInt(items[i]);
                hypernymsGraph.addEdge(v, w);
             }
 
@@ -112,8 +111,9 @@ public class WordNet {
      * distance between nounA and nounB (defined below)
      */
     public int distance(String nounA, String nounB) {
-        int idxA = dict.get(nounA).getIdx();
-        int idxB = dict.get(nounB).getIdx();
+        Iterable<Integer> idxA = dict.get(nounA).getIdxs();
+        Iterable<Integer> idxB = dict.get(nounB).getIdxs();
+        
         return sap.length(idxA, idxB);
     }
 
@@ -123,8 +123,8 @@ public class WordNet {
      * in a shortest ancestral path (defined below)
      */
     public String sap(String nounA, String nounB) {
-        int idxA = dict.get(nounA).getIdx();
-        int idxB = dict.get(nounB).getIdx();
+        Iterable<Integer> idxA = dict.get(nounA).getIdxs();
+        Iterable<Integer> idxB = dict.get(nounB).getIdxs();
         int idxAncestor = sap.ancestor(idxA, idxB);
         return wordlist.get(idxAncestor);
     }

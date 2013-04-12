@@ -34,10 +34,10 @@ public class WordNetTest extends TestCase {
         }
     }
     
-    public void testDistance() {
-        WordNet wn = new WordNet("test\\wordnet\\synsets6.txt", 
-        "test\\wordnet\\hypernyms6TwoAncestors.txt");
-        assertEquals(wn.distance("a", "b"), 1);     
+    public void testDistance() {        
+        WordNet wn15 = new WordNet("test\\wordnet\\synsets15.txt", 
+        "test\\wordnet\\hypernymsTree15.txt");
+        assertEquals(wn15.distance("b", "c"), 2);
     }
     
     public static void main(String[] args) {
