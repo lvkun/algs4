@@ -40,6 +40,37 @@ public class WordNetTest extends TestCase {
         assertEquals(wn15.distance("b", "c"), 2);
     }
     
+    public void testExceptionConstructor() {
+        try {
+            WordNet wn = new WordNet("test\\wordnet\\synsets3.txt", 
+            "test\\wordnet\\hypernymsInvalidCycle.txt");
+            fail("No exception");
+        } catch (java.lang.IllegalArgumentException expected) {
+            System.out.println("catch expected exception");
+        }
+    }
+    
+    public void testExceptionTwoRoots() {
+        try {
+            WordNet wn = new WordNet("test\\wordnet\\synsets3.txt", 
+            "test\\wordnet\\hypernymsInvalidTwoRoots.txt");
+            fail("No exception");
+        } catch (java.lang.IllegalArgumentException expected) {
+            System.out.println("catch expected exception");
+        }
+    }
+    
+    public void testExceptionSap() {
+        try {
+            WordNet wn = new WordNet("test\\wordnet\\synsets15.txt", 
+            "test\\wordnet\\hypernymsTree15.txt");
+            wn.sap("invalid", "a");
+            fail("No exception");
+        } catch (java.lang.IllegalArgumentException expected) {
+            System.out.println("catch expected exception");
+        }
+    }
+    
     public static void main(String[] args) {
         junit.textui.TestRunner.run(suite());
     }

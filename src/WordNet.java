@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class WordNet {
     
-    private BinarySearchST<String, WordInfo> dict;
+    private RedBlackBST<String, ArrayList<Integer>> dict;
     private ArrayList<String> wordlist;
     private Digraph hypernymsGraph;
     private SAP sap;
@@ -14,20 +14,25 @@ public class WordNet {
      */
     public WordNet(String synsets, String hypernyms) {
         readSynsets(synsets);
-        readHypernyms(hypernyms);
+        int root = readHypernyms(hypernyms);
+        
+        DirectedCycle dc = new DirectedCycle(hypernymsGraph);
+        
+        if (root > 1 || dc.hasCycle()) {
+            throw new java.lang.IllegalArgumentException();
+        }
         
         sap = new SAP(hypernymsGraph);
     }
     
-    private class WordInfo {
-        private ArrayList<Integer> idx;
-        
-        public WordInfo() {
-            idx = new ArrayList<Integer>();
-        }
-
-        public ArrayList<Integer> getIdxs() {
-            return idx;
+    private void addToDict(String word, int idx) {
+        if (dict.contains(word)) {
+            ArrayList<Integer> idxs = dict.get(word);
+            idxs.add(idx);
+        } else {
+            ArrayList<Integer> idxs = new ArrayList<Integer>();
+            idxs.add(idx);
+            dict.put(word, idxs);
         }
     }
     
@@ -40,7 +45,7 @@ public class WordNet {
         In in = new In(synsetsFilename);
         String line = in.readLine();
         
-        dict = new BinarySearchST<String, WordInfo>();
+        dict = new RedBlackBST<String, ArrayList<Integer>>();
         wordlist = new ArrayList<String>();
         
         String[] items = {"0"};
@@ -51,15 +56,13 @@ public class WordNet {
                 continue;
             }
             
-            //Integer.parseInt(items[0]);
-            if (dict.contains(items[1])) {
-                WordInfo wi = dict.get(items[1]);
-                wi.idx.add(Integer.parseInt(items[0]));
-            } else {
-                WordInfo wi = new WordInfo();
-                wi.idx.add(Integer.parseInt(items[0]));
-                dict.put(items[1], wi);
+            String[] words = items[1].split(" ");
+            
+            for (String word : words) {
+                addToDict(word, Integer.parseInt(items[0]));
             }
+            
+            
             wordlist.add(items[1]);
             
             line = in.readLine();
@@ -68,10 +71,11 @@ public class WordNet {
         maxIndex = Integer.parseInt(items[0]) + 1;
     }
     
-    private void readHypernyms(String hypernymsFilename) {
+    private int readHypernyms(String hypernymsFilename) {
         In in = new In(hypernymsFilename);
         String line = in.readLine();
         hypernymsGraph = new Digraph(maxIndex);
+        int unroots = 0;
         
         while (line != null) {
             String[] items = line.split(",");
@@ -82,16 +86,16 @@ public class WordNet {
             }
             
             int v = Integer.parseInt(items[0]);
+            unroots += 1;
             for (int i = 1; i < items.length; i++) {
                int w = Integer.parseInt(items[i]);
                hypernymsGraph.addEdge(v, w);
             }
-
             line = in.readLine();
         }
+        
+        return maxIndex - unroots;
     }
-    
-
 
     /*
      * returns all WordNet nouns
@@ -111,8 +115,12 @@ public class WordNet {
      * distance between nounA and nounB (defined below)
      */
     public int distance(String nounA, String nounB) {
-        Iterable<Integer> idxA = dict.get(nounA).getIdxs();
-        Iterable<Integer> idxB = dict.get(nounB).getIdxs();
+        Iterable<Integer> idxA = dict.get(nounA);
+        Iterable<Integer> idxB = dict.get(nounB);
+        
+        if (idxA == null || idxB == null) {
+            throw new java.lang.IllegalArgumentException();
+        }
         
         return sap.length(idxA, idxB);
     }
@@ -123,8 +131,13 @@ public class WordNet {
      * in a shortest ancestral path (defined below)
      */
     public String sap(String nounA, String nounB) {
-        Iterable<Integer> idxA = dict.get(nounA).getIdxs();
-        Iterable<Integer> idxB = dict.get(nounB).getIdxs();
+        Iterable<Integer> idxA = dict.get(nounA);
+        Iterable<Integer> idxB = dict.get(nounB);
+        
+        if (idxA == null || idxB == null) {
+            throw new java.lang.IllegalArgumentException();
+        }
+        
         int idxAncestor = sap.ancestor(idxA, idxB);
         return wordlist.get(idxAncestor);
     }
