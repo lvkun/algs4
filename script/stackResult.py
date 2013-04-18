@@ -1,4 +1,4 @@
-# parse stack result to see the result is valid or not. 
+# parse stack result to see the result is valid or not.
 # if it is valid, then show the push pop process.
 
 def parse(args):
@@ -11,7 +11,7 @@ def parse(args):
             result.append(char)
             result.append(pop_symbol)
             continue
-        
+
         pos = 0
         handled = False
         while pos < len(result):
@@ -30,19 +30,19 @@ def parse(args):
             handled = True
             pos += 1
             break
-            
+
         if not handled:
             result.append(char)
             result.append(pop_symbol)
 
     print(" ".join(result))
-    
+
 def verify(args):
     li = args.split()
     pos = 0
     print(args)
     while pos < len(li):
-        
+
         char = li[pos]
         comp_pos = pos
         prev_char = None
@@ -56,9 +56,9 @@ def verify(args):
                     break
                 else:
                     prev_char = cur_char
-            
+
             comp_pos += 1
-        
+
         pos += 1
 
 if __name__ == "__main__":
@@ -67,4 +67,3 @@ if __name__ == "__main__":
     verify("B C E A F H G I J D")
     verify("D F E H C G B I J A")
     verify("C B A D E F G H I J")
-    

@@ -9,25 +9,25 @@ def shell_sort(ary, step):
 
 def selection_sort(ary, times=None):
     for i in range(0, len(ary)):
-        
+
         if times and times == i:
             print(times)
             print(" ".join(ary))
-        
+
         min_pos = i
         for j in range(i, len(ary)):
             if ary[j] < ary[min_pos]:
                 min_pos = j
-        
+
         ary[i],ary[min_pos] = ary[min_pos], ary[i]
-        
+
 
 def insertion_sort(ary, times=None):
     exchanges = 0
     for i in range(1, len(ary)):
         if ary[i] > ary[i-1]:
             continue
-        
+
         for j in range(i, 0, -1):
             if ary[j] < ary[j-1]:
                 ary[j], ary[j-1] = ary[j-1], ary[j]

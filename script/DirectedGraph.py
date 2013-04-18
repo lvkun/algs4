@@ -26,26 +26,26 @@ class TopologicalSort:
 def main():
 
     g1 = Graph("""
-    A:  F E 
-    B:  A C G F 
-    C:  G 
-    D:  C 
-    E:  F 
-    F:  G 
-    G:  H 
-    H:  C D 
+    A:  F E
+    B:  A C G F
+    C:  G
+    D:  C
+    E:  F
+    F:  G
+    G:  H
+    H:  C D
         """)
     BreathFirstSearch(g1, "A")
 
     g2 = Graph("""
-    A:  E F 
-    B:  A C G F 
-    C:  G D H 
-    D:  H 
-    E:  
-    F:  G E 
-    G:  H 
-    H:  
+    A:  E F
+    B:  A C G F
+    C:  G D H
+    D:  H
+    E:
+    F:  G E
+    G:  H
+    H:
         """)
     TopologicalSort(g2, "A")
 

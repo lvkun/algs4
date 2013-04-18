@@ -6,10 +6,10 @@ class Graph:
         self.dict = defaultdict(list)
         for line in info.split("\n"):
             items = line.split(":")
-            
+
             if len(items) < 2:
                 continue
-            
+
             key = items[0].strip()
             values = items[1].split()
             self.dict[key] = values
@@ -27,7 +27,7 @@ class DepthFirstSearch:
     def __init__(self, graph, index):
         self.marked = defaultdict(bool)
         self.visited = []
-        
+
         self.dfs(graph, index)
 
         print " ".join(self.visited)
@@ -47,7 +47,7 @@ class BreathFirstSearch:
         self.visited = []
 
         self.queue = deque()
-        
+
         self.bfs(graph, index)
 
         print " ".join(self.visited)
@@ -72,28 +72,28 @@ def main():
 
     # Question 1
     g1 = Graph("""
-    A:  E F B 
-    B:  C A 
-    C:  B F 
-    D:  G H 
-    E:  A 
-    F:  A C G 
-    G:  H D F 
-    H:  G D 
+    A:  E F B
+    B:  C A
+    C:  B F
+    D:  G H
+    E:  A
+    F:  A C G
+    G:  H D F
+    H:  G D
         """)
 
     dfs = DepthFirstSearch(g1, "A")
 
     # Question 2
     g2 = Graph("""
-    A:  B 
-    B:  A F C E 
-    C:  G B D 
-    D:  G H C 
-    E:  B F 
-    F:  B E 
-    G:  D C H 
-    H:  D G 
+    A:  B
+    B:  A F C E
+    C:  G B D
+    D:  G H C
+    E:  B F
+    F:  B E
+    G:  D C H
+    H:  D G
         """)
 
     bfs = BreathFirstSearch(g2, "A")
