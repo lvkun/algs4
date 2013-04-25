@@ -43,9 +43,6 @@ class EdgeWeightedDigraph:
     def V(self):
         return len(self.adj)
 
-    def vertexs(self):
-        return self.adj.keys()
-
 class IndexMinPQ:
 
     def __init__(self):
@@ -144,8 +141,11 @@ class DijkstraSP:
                 self.relax(edge)
             print(v)
             result = []
-            for i in "A   B   C   D   E   F   G   H".split():
-                result.append(str(int(self.distTo[i])))
+            for k in "A   B   C   D   E   F   G   H".split():
+                if self.distTo[k] == maxfloat():
+                    result.append("-")
+                else:
+                    result.append(str(int(self.distTo[k])))
             print(" ".join(result))
 
     def relax(self, edge):
@@ -178,8 +178,11 @@ class AcyclicSP:
 
             print(v)
             result = []
-            for i in "A   B   C   D   E   F   G   H".split():
-                result.append(str(int(self.distTo[i])))
+            for k in "A   B   C   D   E   F   G   H".split():
+                if self.distTo[k] == maxfloat():
+                    result.append("-")
+                else:
+                    result.append(str(int(self.distTo[k])))
             print(" ".join(result))
 
     def relax(self, edge):
@@ -198,21 +201,29 @@ class BellmanFordSP:
         self.distTo[start] = 0.0
         self.edgeTo = defaultdict(DirectedEdge)
 
+        j = 0
         for i in range(0, graph.V()):
-            for v in graph.vertexs():
+            
+            print(j)
+            for v in "A   B   C   D   E   F   G   H".split():
                 for edge in graph.adj[v]:
                     self.relax(edge)
 
-            print(i)
             result = []
             for k in "A   B   C   D   E   F   G   H".split():
-                result.append(str(int(self.distTo[k])))
+                if self.distTo[k] == maxfloat():
+                    result.append("-")
+                else:
+                    result.append(str(int(self.distTo[k])))
             print(" ".join(result))
+            
+            j += 1
 
     def relax(self, edge):
-
+        
         v = edge.From()
         w = edge.To()
+        
         if self.distTo[w] > self.distTo[v] + edge.weight:
             self.distTo[w] = self.distTo[v] + edge.weight
             self.edgeTo[w] = edge
@@ -225,56 +236,56 @@ def index_to_letter(i):
 
 if __name__ == "__main__":
     graph1 = EdgeWeightedDigraph("""
-    A->B    34
-    A->F     2
-    B->C     4
-    B->G    11
-    C->D    22
-    C->G     2
-    C->H     5
-    E->A    30
-    E->F     1
-    F->B    71
-    F->G    75
-    H->D    10
+    A->E     9
+    A->F     1
+    B->A    10
+    B->C    39
+    B->F    17
+    C->D     1
+    C->F     5
+    C->G     9
+    C->H    30
+    D->H    20
+    F->E     1
+    F->G    39
     H->G     5
     """)
-    DijkstraSP(graph1, "E")
+    DijkstraSP(graph1, "B")
 
     print("********")
 
     graph2 = EdgeWeightedDigraph("""
-    A->E    29
-    A->F     4
-    B->A    12
-    B->F     7
-    C->B    10
-    C->D    26
-    C->F    24
-    C->G    82
-    D->G    53
-    D->H    32
-    F->E    24
-    G->F     3
-    H->G    18
+    A->B    37
+    A->F    26
+    B->C    27
+    C->D     8
+    C->G    28
+    D->H    22
+    E->A     5
+    E->F    41
+    F->B     9
+    F->C    32
+    F->G    62
+    G->D     3
+    G->H     3
     """)
-    AcyclicSP(graph2, "C", "C D H G B A F E")
+    AcyclicSP(graph2, "E", "E A F B C G D H")
 
     print("********")
 
     graph3 = EdgeWeightedDigraph("""
-    A->E    14
-    B->A    19
-    B->F    33
-    B->E    41
-    C->B    10
-    D->C    28
-    D->H     4
-    E->F     2
-    G->F    26
-    G->C     5
-    G->B     0
-    H->G    27
-    H->C    23
+    B->A    36
+    B->C     3
+    B->E    19
+    C->F     0
+    D->G    58
+    D->H    21
+    D->C    66
+    E->A    24
+    F->E    38
+    F->B    17
+    G->C     6
+    G->F     1
+    H->G    31
     """)
     BellmanFordSP(graph3, "D")
