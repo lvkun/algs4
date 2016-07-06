@@ -4,5 +4,6 @@
 .classpath
 .pydevproject
 *.pyc
+*.*
 bin
 test
